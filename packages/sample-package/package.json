@@ -1,0 +1,14 @@
+{
+    "name": "@phphive/sample-package",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "composer:install": "composer install --no-interaction --prefer-dist --optimize-autoloader",
+        "test": "vendor/bin/phpunit",
+        "test:unit": "vendor/bin/phpunit --testsuite=Unit",
+        "lint": "vendor/bin/pint --test",
+        "format": "vendor/bin/pint",
+        "typecheck": "vendor/bin/phpstan analyse",
+        "clean": "rm -rf .phpunit.cache .phpstan.cache"
+    }
+}

@@ -140,34 +140,34 @@ Commands follow PSR-4 autoloading with namespaces matching directory structure:
 
 ```php
 // Base command
-namespace MonoPhp\Cli\Commands;
+namespace MonoPhp\Cli\Console\Commands;
 
 // Composer commands
-namespace MonoPhp\Cli\Commands\Composer;
+namespace MonoPhp\Cli\Console\Commands\Composer;
 
 // Deploy commands
-namespace MonoPhp\Cli\Commands\Deploy;
+namespace MonoPhp\Cli\Console\Commands\Deploy;
 
 // Dev commands
-namespace MonoPhp\Cli\Commands\Dev;
+namespace MonoPhp\Cli\Console\Commands\Dev;
 
 // Lifecycle commands
-namespace MonoPhp\Cli\Commands\Lifecycle;
+namespace MonoPhp\Cli\Console\Commands\Lifecycle;
 
 // Make commands
-namespace MonoPhp\Cli\Commands\Make;
+namespace MonoPhp\Cli\Console\Commands\Make;
 
 // Quality commands
-namespace MonoPhp\Cli\Commands\Quality;
+namespace MonoPhp\Cli\Console\Commands\Quality;
 
 // Turbo commands
-namespace MonoPhp\Cli\Commands\Turbo;
+namespace MonoPhp\Cli\Console\Commands\Turbo;
 
 // Workspace commands
-namespace MonoPhp\Cli\Commands\Workspace;
+namespace MonoPhp\Cli\Console\Commands\Workspace;
 
 // Utility commands
-namespace MonoPhp\Cli\Commands\Utility;
+namespace MonoPhp\Cli\Console\Commands\Utility;
 ```
 
 ## Command Discovery
@@ -254,9 +254,9 @@ All commands follow consistent documentation patterns:
 
 declare(strict_types=1);
 
-namespace MonoPhp\Cli\Commands\Category;
+namespace MonoPhp\Cli\Console\Commands\Category;
 
-use MonoPhp\Cli\Commands\BaseCommand;
+use MonoPhp\Cli\Console\Commands\BaseCommand;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

@@ -1,7 +1,0 @@
-includes:
-    - ../../tooling/phpstan/phpstan-app.neon
-
-parameters:
-    paths:
-        - src
-        - public
