@@ -1,0 +1,6 @@
+includes:
+    - ../../tooling/phpstan/phpstan-package.neon
+
+parameters:
+    paths:
+        - src

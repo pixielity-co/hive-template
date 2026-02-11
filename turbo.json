@@ -1,21 +1,270 @@
 {
-  "$schema": "https://turborepo.dev/schema.json",
-  "ui": "tui",
-  "tasks": {
-    "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+    "$schema": "https://turborepo.dev/schema.json",
+    "ui": "tui",
+    "daemon": true,
+    "envMode": "strict",
+    "concurrency": "10",
+    "cacheDir": ".turbo/cache",
+    "noUpdateNotifier": false,
+    "dangerouslyDisablePackageManagerCheck": false,
+    "globalDependencies": [
+        ".env",
+        ".env.example",
+        "composer.json",
+        "composer.lock",
+        "pnpm-lock.yaml",
+        "turbo.json",
+        "tooling/**"
+    ],
+    "globalEnv": [
+        "NODE_ENV",
+        "CI",
+        "VERCEL",
+        "GITHUB_ACTIONS"
+    ],
+    "globalPassThroughEnv": [
+        "HOME",
+        "PATH",
+        "SHELL",
+        "USER",
+        "TMPDIR",
+        "LANG",
+        "LC_ALL",
+        "TZ"
+    ],
+    "remoteCache": {
+        "enabled": true,
+        "signature": false,
+        "preflight": false,
+        "timeout": 30,
+        "uploadTimeout": 60
     },
-    "lint": {
-      "dependsOn": ["^lint"]
-    },
-    "check-types": {
-      "dependsOn": ["^check-types"]
-    },
-    "dev": {
-      "cache": false,
-      "persistent": true
+    "tasks": {
+        "setup": {
+            "description": "Initial setup for a workspace (install deps, generate keys, migrate)",
+            "dependsOn": ["composer:install"],
+            "cache": false,
+            "interactive": false,
+            "persistent": false
+        },
+        "composer:install": {
+            "description": "Install PHP dependencies via Composer",
+            "inputs": [
+                "composer.json",
+                "composer.lock"
+            ],
+            "outputs": [
+                "vendor/**",
+                "composer.lock"
+            ],
+            "cache": true,
+            "env": [],
+            "passThroughEnv": [
+                "COMPOSER_AUTH",
+                "COMPOSER_HOME",
+                "COMPOSER_CACHE_DIR"
+            ],
+            "outputLogs": "hash-only"
+        },
+        "build": {
+            "description": "Build production assets",
+            "dependsOn": [
+                "^build",
+                "composer:install"
+            ],
+            "inputs": [
+                "$TURBO_DEFAULT$",
+                ".env",
+                ".env.example",
+                "!**/*.md",
+                "!**/*.test.php",
+                "!tests/**"
+            ],
+            "outputs": [
+                "public/build/**",
+                "public/hot",
+                "bootstrap/cache/**"
+            ],
+            "cache": true,
+            "env": [
+                "APP_ENV",
+                "APP_KEY",
+                "APP_URL",
+                "VITE_*"
+            ],
+            "outputLogs": "new-only"
+        },
+        "lint": {
+            "description": "Check code style with Pint",
+            "dependsOn": [
+                "^lint",
+                "composer:install"
+            ],
+            "inputs": [
+                "$TURBO_DEFAULT$",
+                "!**/*.md",
+                "!vendor/**",
+                "!node_modules/**"
+            ],
+            "outputs": [],
+            "cache": true,
+            "outputLogs": "errors-only"
+        },
+        "format": {
+            "description": "Fix code style with Pint",
+            "dependsOn": ["composer:install"],
+            "inputs": [
+                "$TURBO_DEFAULT$",
+                "!**/*.md",
+                "!vendor/**",
+                "!node_modules/**"
+            ],
+            "outputs": [],
+            "cache": false,
+            "outputLogs": "new-only"
+        },
+        "test": {
+            "description": "Run PHPUnit tests",
+            "dependsOn": [
+                "^test",
+                "composer:install"
+            ],
+            "inputs": [
+                "$TURBO_DEFAULT$",
+                "phpunit.xml",
+                "phpunit.xml.dist",
+                "!vendor/**",
+                "!node_modules/**"
+            ],
+            "outputs": [
+                "tests/Datasets/**",
+                "coverage/**",
+                ".phpunit.cache/**"
+            ],
+            "cache": true,
+            "env": [
+                "APP_ENV",
+                "DB_CONNECTION",
+                "DB_DATABASE"
+            ],
+            "outputLogs": "errors-only"
+        },
+        "test:unit": {
+            "description": "Run PHPUnit unit tests only",
+            "dependsOn": ["composer:install"],
+            "inputs": [
+                "$TURBO_DEFAULT$",
+                "phpunit.xml",
+                "!vendor/**",
+                "!tests/Feature/**"
+            ],
+            "outputs": [
+                "coverage/**",
+                ".phpunit.cache/**"
+            ],
+            "cache": true,
+            "env": [
+                "APP_ENV"
+            ],
+            "outputLogs": "errors-only"
+        },
+        "test:feature": {
+            "description": "Run PHPUnit feature tests only",
+            "dependsOn": ["composer:install"],
+            "inputs": [
+                "$TURBO_DEFAULT$",
+                "phpunit.xml",
+                "!vendor/**",
+                "!tests/Unit/**"
+            ],
+            "outputs": [
+                "coverage/**",
+                ".phpunit.cache/**"
+            ],
+            "cache": true,
+            "env": [
+                "APP_ENV",
+                "DB_CONNECTION",
+                "DB_DATABASE"
+            ],
+            "outputLogs": "errors-only"
+        },
+        "typecheck": {
+            "description": "Run static analysis with PHPStan/Larastan",
+            "dependsOn": [
+                "^typecheck",
+                "composer:install"
+            ],
+            "inputs": [
+                "$TURBO_DEFAULT$",
+                "phpstan.neon",
+                "phpstan.neon.dist",
+                "$TURBO_ROOT$/tooling/phpstan/**",
+                "!vendor/**",
+                "!node_modules/**",
+                "!**/*.md"
+            ],
+            "outputs": [
+                ".phpstan.cache/**"
+            ],
+            "cache": true,
+            "outputLogs": "errors-only"
+        },
+        "dev": {
+            "description": "Start development server",
+            "dependsOn": ["composer:install"],
+            "cache": false,
+            "persistent": true,
+            "interactive": false,
+            "env": [
+                "APP_*",
+                "DB_*",
+                "REDIS_*",
+                "MAIL_*",
+                "AWS_*",
+                "VITE_*"
+            ],
+            "outputLogs": "full"
+        },
+        "start": {
+            "description": "Start production server",
+            "dependsOn": ["build"],
+            "cache": false,
+            "persistent": true,
+            "interactive": false,
+            "env": [
+                "APP_*",
+                "DB_*",
+                "REDIS_*",
+                "MAIL_*",
+                "AWS_*"
+            ],
+            "outputLogs": "full"
+        },
+        "clean": {
+            "description": "Clear caches and build artifacts",
+            "cache": false,
+            "outputs": [],
+            "outputLogs": "new-only"
+        },
+        "deploy": {
+            "description": "Full deployment pipeline",
+            "dependsOn": [
+                "build",
+                "test",
+                "lint",
+                "typecheck"
+            ],
+            "cache": true,
+            "outputs": [],
+            "outputLogs": "errors-only"
+        },
+        "generate": {
+            "description": "Generate application keys and artifacts",
+            "dependsOn": ["composer:install"],
+            "cache": false,
+            "outputs": [],
+            "outputLogs": "new-only"
+        }
     }
-  }
 }

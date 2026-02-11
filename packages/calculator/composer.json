@@ -1,0 +1,40 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "mono-php/calculator",
+    "description": "Simple calculator package for monorepo testing",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0",
+        "phpstan/phpstan": "^2.0",
+        "laravel/pint": "^1.24"
+    },
+    "autoload": {
+        "psr-4": {
+            "MonoPhp\\Calculator\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MonoPhp\\Calculator\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test:unit": "phpunit --testsuite=Unit",
+        "test:feature": "phpunit --testsuite=Feature",
+        "lint": "pint --test",
+        "format": "pint",
+        "typecheck": "phpstan analyse"
+    },
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true,
+        "preferred-install": "dist"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

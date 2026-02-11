@@ -1,20 +1,33 @@
 {
-  "name": "mono-php",
-  "private": true,
-  "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
-  },
-  "devDependencies": {
-    "prettier": "^3.7.4",
-    "turbo": "^2.8.5",
-    "typescript": "5.9.2"
-  },
-  "packageManager": "pnpm@9.0.0",
-  "engines": {
-    "node": ">=18"
-  }
+    "name": "mono-php",
+    "private": true,
+    "scripts": {
+        "postinstall": "./cli/bin/mono install",
+        "dev": "./cli/bin/mono dev",
+        "build": "./cli/bin/mono build",
+        "start": "./cli/bin/mono start",
+        "test": "./cli/bin/mono test",
+        "test:unit": "./cli/bin/mono test --unit",
+        "test:feature": "./cli/bin/mono test --feature",
+        "lint": "./cli/bin/mono lint",
+        "format": "./cli/bin/mono format",
+        "typecheck": "./cli/bin/mono typecheck",
+        "refactor": "./cli/bin/mono refactor",
+        "refactor:dry": "./cli/bin/mono refactor --dry-run",
+        "mutate": "./cli/bin/mono mutate",
+        "clean": "./cli/bin/mono clean",
+        "cleanup": "./cli/bin/mono cleanup",
+        "deploy": "./cli/bin/mono deploy",
+        "list": "./cli/bin/mono list",
+        "info": "./cli/bin/mono info",
+        "doctor": "./cli/bin/mono doctor"
+    },
+    "devDependencies": {
+        "prettier": "^3.7.4",
+        "turbo": "^2.8.5"
+    },
+    "packageManager": "pnpm@9.0.0",
+    "engines": {
+        "node": ">=18"
+    }
 }

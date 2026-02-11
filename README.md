@@ -1,135 +1,301 @@
-# Turborepo starter
+# PHP Turborepo Monorepo
 
-This Turborepo starter is maintained by the Turborepo core team.
+A production-ready PHP monorepo powered by Turborepo, pnpm, and Composer.
 
-## Using this example
-
-Run the following command:
-
-```sh
-npx create-turbo@latest
-```
-
-## What's inside?
-
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
+## Structure
 
 ```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+.
+├── apps/
+│   └── api/              # Laravel 12 application
+├── packages/
+│   ├── calculator/       # PHP library package
+│   └── logger/           # PHP library package
+├── tooling/
+│   ├── schemas/          # Templates for new apps/packages
+│   ├── phpstan/          # PHPStan configurations
+│   ├── pint/             # Pint (PHP CS Fixer) config
+│   ├── rector/           # Rector refactoring config
+│   ├── infection/        # Infection mutation testing config
+│   ├── linting/          # Prettier config for non-PHP files
+│   └── scripts/          # Workspace management scripts
+├── bin/
+│   └── mono              # PHP CLI wrapper for common tasks
+├── composer.json         # Root composer with advanced tooling
+├── package.json          # Root npm scripts
+├── turbo.json            # Turborepo pipeline configuration
+└── pnpm-workspace.yaml   # pnpm workspace definition
 ```
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+## Quick Start
 
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+```bash
+# Install all dependencies (node + composer)
+pnpm install
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+# Or use the PHP CLI
+php bin/mono install
 
-### Develop
+# Start development
+pnpm dev
 
-To develop all apps and packages, run the following command:
+# Run tests
+pnpm test
 
-```
-cd my-turborepo
+# Lint code
+pnpm lint
 
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
+# Format code
+pnpm format
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+# Type check
+pnpm typecheck
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+## The `mono` CLI
 
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+A PHP binary that wraps pnpm/turbo for a native PHP developer experience:
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
+```bash
+# Development
+php bin/mono dev                    # Start all dev servers
+php bin/mono dev --filter=api       # Start only api
 
-### Remote Caching
+# Testing
+php bin/mono test                   # Run all tests
+php bin/mono test --filter=api      # Test only api
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+# Code Quality
+php bin/mono lint                   # Check code style
+php bin/mono format                 # Fix code style
+php bin/mono typecheck              # Run static analysis
+php bin/mono refactor               # Run Rector refactoring
+php bin/mono refactor:dry           # Preview Rector changes
+php bin/mono mutate                 # Run mutation testing
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+# Utilities
+php bin/mono artisan migrate        # Run artisan commands
+php bin/mono composer api require laravel/sanctum
+php bin/mono workspace:sync         # Check workspace health
+php bin/mono clean                  # Clear caches
+php bin/mono cleanup                # Nuclear clean (removes all deps)
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## Architecture
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+### Centralized Tooling
+
+All complex tooling logic lives at the root level:
+
+- **Root `composer.json`**: Handles Rector, Infection, and orchestrates lint/format/typecheck across workspaces
+- **Root `package.json`**: Delegates to Turbo for parallel execution
+- **Turbo**: Manages task dependencies, caching, and parallelization
+
+### Simple Workspaces
+
+Apps and packages have minimal, consistent scripts:
+
+**Apps** (`apps/*/package.json`):
+```json
+{
+  "scripts": {
+    "dev": "php artisan serve",
+    "test": "vendor/bin/phpunit",
+    "lint": "vendor/bin/pint --test",
+    "format": "vendor/bin/pint",
+    "typecheck": "vendor/bin/phpstan analyse",
+    "clean": "php artisan optimize:clear && rm -rf .phpstan.cache",
+    "composer:install": "composer install --no-interaction --prefer-dist --optimize-autoloader"
+  }
+}
+```
+
+**Packages** (`packages/*/package.json`):
+```json
+{
+  "scripts": {
+    "test": "vendor/bin/phpunit",
+    "lint": "vendor/bin/pint --test",
+    "format": "vendor/bin/pint",
+    "typecheck": "vendor/bin/phpstan analyse",
+    "clean": "rm -rf vendor .phpstan.cache",
+    "composer:install": "composer install --no-interaction --prefer-dist --optimize-autoloader"
+  }
+}
+```
+
+## Tooling Stack
+
+- **Pint**: Code formatting (Laravel's PHP CS Fixer wrapper)
+- **PHPStan**: Static analysis at level 8
+- **Larastan**: PHPStan for Laravel (apps only)
+- **Rector**: Automated refactoring (PHP 8.2, code quality, dead code removal)
+- **Infection**: Mutation testing
+- **PHPUnit**: Unit and feature testing
+- **Prettier**: Formatting for JSON, YAML, Markdown
+
+## Task Pipeline
+
+Turbo orchestrates tasks with proper dependencies:
 
 ```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+composer:install (cached)
+    ↓
+lint / format / test / typecheck (parallel)
+    ↓
+build
+    ↓
+deploy
 ```
 
-## Useful Links
+### Caching
 
-Learn more about the power of Turborepo:
+- `composer:install`: Caches `vendor/` and `composer.lock`
+- `typecheck`: Caches `.phpstan.cache/`
+- `test`: Caches test datasets
+- `build`: Caches `public/build/`
 
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+## Creating New Workspaces
+
+Use the schema templates in `tooling/schemas/`:
+
+### New App
+
+```bash
+mkdir -p apps/admin
+cp tooling/schemas/composer-app.json apps/admin/composer.json
+cp tooling/schemas/package-app.json apps/admin/package.json
+# Edit files to update name, namespace, etc.
+cd apps/admin && composer install
+```
+
+### New Package
+
+```bash
+mkdir -p packages/utils
+cp tooling/schemas/composer-package.json packages/utils/composer.json
+cp tooling/schemas/package-package.json packages/utils/package.json
+# Edit files to update name, namespace, etc.
+cd packages/utils && composer install
+```
+
+## Using Local Packages
+
+Apps automatically discover all local packages via wildcard path repository:
+
+```json
+// apps/api/composer.json
+{
+  "repositories": [
+    { "type": "path", "url": "../../packages/*" }
+  ],
+  "require": {
+    "mono-php/calculator": "*",
+    "mono-php/logger": "*"
+  }
+}
+```
+
+When you add a new package to `packages/`, just require it in your app and run `composer update`.
+
+## Scripts Reference
+
+### Root Scripts (pnpm)
+
+| Script | Description |
+|--------|-------------|
+| `pnpm install` | Install all deps (triggers postinstall → composer:install) |
+| `pnpm dev` | Start all dev servers |
+| `pnpm build` | Build all apps |
+| `pnpm test` | Run all tests |
+| `pnpm lint` | Check code style |
+| `pnpm format` | Fix code style |
+| `pnpm typecheck` | Run static analysis |
+| `pnpm refactor` | Run Rector refactoring |
+| `pnpm mutate` | Run mutation testing |
+| `pnpm clean` | Clear caches |
+| `pnpm cleanup` | Nuclear clean (removes all deps) |
+| `pnpm deploy` | Full deploy pipeline |
+
+### Root Scripts (composer)
+
+| Script | Description |
+|--------|-------------|
+| `composer lint` | Lint all workspaces |
+| `composer format` | Format all workspaces |
+| `composer typecheck` | Type check all workspaces |
+| `composer refactor` | Run Rector across all workspaces |
+| `composer refactor:dry` | Preview Rector changes |
+| `composer mutate` | Run Infection across all workspaces |
+| `composer test` | Run tests across all workspaces |
+
+## Configuration Files
+
+- `turbo.json`: Task pipeline and caching rules
+- `composer.json`: Root-level PHP tooling
+- `tooling/rector/rector.php`: Rector configuration
+- `tooling/phpstan/*.neon`: PHPStan configurations
+- `tooling/pint/pint.json`: Pint preset
+- `tooling/infection/infection.json5`: Mutation testing config
+- `tooling/linting/.prettierrc`: Prettier config
+
+## CI/CD
+
+The monorepo is designed for CI/CD pipelines:
+
+```yaml
+# Example GitHub Actions
+- run: pnpm install
+- run: pnpm lint
+- run: pnpm typecheck
+- run: pnpm test
+- run: pnpm build
+```
+
+Turbo's caching works with CI providers (Vercel, GitHub Actions, etc.) for remote caching.
+
+## Dependency Management
+
+### Composer
+
+- **`vendor/`**: Ignored in git, generated by `composer install`
+- **`composer.lock`**: Committed to git for reproducible builds
+- Each workspace has its own `vendor/` and `composer.lock`
+- Root also has `vendor/` and `composer.lock` for shared tooling (Rector, Infection)
+
+### npm/pnpm
+
+- **`node_modules/`**: Ignored in git, generated by `pnpm install`
+- **`pnpm-lock.yaml`**: Committed to git for reproducible builds
+- Single root `node_modules/` (pnpm workspace hoisting)
+
+### Clean Commands
+
+```bash
+# Clear caches only (keeps dependencies and lock files)
+pnpm clean
+
+# Nuclear clean (removes EVERYTHING including lock files)
+pnpm cleanup
+# This removes:
+# - node_modules/ (all)
+# - vendor/ (all)
+# - .turbo/ (all)
+# - .phpstan.cache/ (all)
+# - pnpm-lock.yaml
+# - composer.lock (all)
+# - *.log (all)
+```
+
+**⚠️ Warning:** After `pnpm cleanup`, you'll need to run `pnpm install` to regenerate lock files and reinstall all dependencies.
+
+## Requirements
+
+- PHP 8.2+
+- Node.js 18+
+- Composer 2.x
+- pnpm 9.x
+
+## License
+
+MIT

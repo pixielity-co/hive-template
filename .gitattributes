@@ -1,0 +1,41 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# PHP
+*.php text eol=lf
+composer.lock text eol=lf merge=ours
+
+# JavaScript/TypeScript
+*.js text eol=lf
+*.ts text eol=lf
+*.json text eol=lf
+pnpm-lock.yaml text eol=lf merge=ours
+
+# Config files
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+*.ini text eol=lf
+*.neon text eol=lf
+
+# Shell scripts
+*.sh text eol=lf
+bin/* text eol=lf
+
+# Markdown
+*.md text eol=lf
+
+# Images
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg text
+
+# Archives
+*.zip binary
+*.tar binary
+*.gz binary
+*.tgz binary
+*.phar binary
