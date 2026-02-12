@@ -25,9 +25,15 @@ hive make:workspace my-project
 ```bash
 git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
 cd YOUR_REPO
+
+# Install Node.js dependencies
 pnpm install
-composer install
+
+# Install PHP dependencies (requires PhpHive CLI)
+hive install
 ```
+
+> **Note**: After `pnpm install`, you need to run `hive install` manually to install PHP dependencies across all workspaces.
 
 ## 📁 Project Structure
 
@@ -65,8 +71,8 @@ hive-template/
 
 ```bash
 # Install dependencies
-pnpm install
-composer install
+pnpm install          # Install Node.js dependencies
+hive install          # Install PHP dependencies across all workspaces
 
 # Development
 pnpm dev              # Start development servers
@@ -74,10 +80,11 @@ pnpm build            # Build all packages
 
 # Testing
 pnpm test             # Run all tests
-composer test         # Run PHP tests
+hive test             # Run PHP tests across all workspaces
 
 # Code Quality
 pnpm lint             # Lint all packages
+hive lint             # Lint PHP code across all workspaces
 composer lint         # Lint PHP code
 ```
 

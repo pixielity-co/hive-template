@@ -2,7 +2,6 @@
     "name": "phphive",
     "private": true,
     "scripts": {
-        "postinstall": "hive install",
         "dev": "hive dev",
         "build": "hive build",
         "start": "hive start",
