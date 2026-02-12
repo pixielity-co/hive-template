@@ -13,20 +13,6 @@
         "phpstan/phpstan": "^2.0",
         "rector/rector": "^2.0"
     },
-    "scripts": {
-        "install": "hive install",
-        "test": "hive test",
-        "test:unit": "hive test --unit",
-        "test:feature": "hive test --feature",
-        "lint": "hive lint",
-        "format": "hive format",
-        "typecheck": "hive typecheck",
-        "refactor": "hive refactor",
-        "refactor:dry": "hive refactor --dry-run",
-        "mutate": "hive mutate",
-        "clean": "hive clean",
-        "cleanup": "hive cleanup"
-    },
     "config": {
         "sort-packages": true,
         "allow-plugins": {
