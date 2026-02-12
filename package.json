@@ -23,7 +23,7 @@
     },
     "devDependencies": {
         "prettier": "^3.7.4",
-        "turbo": "^2.8.5"
+        "turbo": "^2.8.7"
     },
     "packageManager": "pnpm@9.0.0",
     "engines": {

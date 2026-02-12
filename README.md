@@ -4,6 +4,15 @@
 
 This is the official template repository for creating new PhpHive workspaces. It provides a pre-configured monorepo structure with sample applications and packages.
 
+## 📋 Requirements
+
+- **PHP**: 8.4 or higher
+- **Composer**: 2.0 or higher
+- **Node.js**: 18 or higher
+- **pnpm**: 9.0 or higher
+- **Turborepo**: 2.5.6 or higher (installed via pnpm)
+- **PhpHive CLI**: Latest version (`composer global require phphive/cli`)
+
 ## 🚀 Quick Start
 
 ### Using PhpHive CLI (Recommended)

@@ -41,14 +41,12 @@
     },
     "tasks": {
         "setup": {
-            "description": "Initial setup for a workspace (install deps, generate keys, migrate)",
             "dependsOn": ["composer:install"],
             "cache": false,
             "interactive": false,
             "persistent": false
         },
         "composer:install": {
-            "description": "Install PHP dependencies via Composer",
             "inputs": [
                 "composer.json",
                 "composer.lock"
@@ -67,7 +65,6 @@
             "outputLogs": "hash-only"
         },
         "build": {
-            "description": "Build production assets",
             "dependsOn": [
                 "^build",
                 "composer:install"
@@ -95,7 +92,6 @@
             "outputLogs": "new-only"
         },
         "lint": {
-            "description": "Check code style with Pint",
             "dependsOn": [
                 "^lint",
                 "composer:install"
@@ -111,7 +107,6 @@
             "outputLogs": "errors-only"
         },
         "format": {
-            "description": "Fix code style with Pint",
             "dependsOn": ["composer:install"],
             "inputs": [
                 "$TURBO_DEFAULT$",
@@ -124,7 +119,6 @@
             "outputLogs": "new-only"
         },
         "test": {
-            "description": "Run PHPUnit tests",
             "dependsOn": [
                 "^test",
                 "composer:install"
@@ -150,7 +144,6 @@
             "outputLogs": "errors-only"
         },
         "test:unit": {
-            "description": "Run PHPUnit unit tests only",
             "dependsOn": ["composer:install"],
             "inputs": [
                 "$TURBO_DEFAULT$",
@@ -169,7 +162,6 @@
             "outputLogs": "errors-only"
         },
         "test:feature": {
-            "description": "Run PHPUnit feature tests only",
             "dependsOn": ["composer:install"],
             "inputs": [
                 "$TURBO_DEFAULT$",
@@ -190,7 +182,6 @@
             "outputLogs": "errors-only"
         },
         "typecheck": {
-            "description": "Run static analysis with PHPStan/Larastan",
             "dependsOn": [
                 "^typecheck",
                 "composer:install"
@@ -211,7 +202,6 @@
             "outputLogs": "errors-only"
         },
         "dev": {
-            "description": "Start development server",
             "dependsOn": ["composer:install"],
             "cache": false,
             "persistent": true,
@@ -227,7 +217,6 @@
             "outputLogs": "full"
         },
         "start": {
-            "description": "Start production server",
             "dependsOn": ["build"],
             "cache": false,
             "persistent": true,
@@ -242,13 +231,11 @@
             "outputLogs": "full"
         },
         "clean": {
-            "description": "Clear caches and build artifacts",
             "cache": false,
             "outputs": [],
             "outputLogs": "new-only"
         },
         "deploy": {
-            "description": "Full deployment pipeline",
             "dependsOn": [
                 "build",
                 "test",
@@ -260,7 +247,6 @@
             "outputLogs": "errors-only"
         },
         "generate": {
-            "description": "Generate application keys and artifacts",
             "dependsOn": ["composer:install"],
             "cache": false,
             "outputs": [],
