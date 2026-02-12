@@ -2,18 +2,14 @@
 
 # PhpHive CLI Wrapper
 # This script calls the globally installed hive command
-# Make sure you have installed PhpHive CLI globally:
-#   composer global require phphive/cli
 
 # Check if hive is installed globally
 if ! command -v hive &> /dev/null; then
-    echo "Error: PhpHive CLI is not installed globally"
-    echo ""
-    echo "Install it with:"
+    echo "Error: hive command not found"
+    echo "Please install PhpHive CLI globally:"
     echo "  composer global require phphive/cli"
-    echo ""
     exit 1
 fi
 
-# Forward all arguments to the global hive command
+# Execute hive with all arguments
 hive "$@"
