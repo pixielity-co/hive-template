@@ -1,5 +1,5 @@
 {
-    "name": "@repo/sample-app",
+    "name": "phphive/sample-app",
     "description": "Sample application for PhpHive monorepo",
     "type": "project",
     "license": "MIT",
