@@ -1,15 +1,31 @@
 #!/usr/bin/env bash
 
 # PhpHive CLI Wrapper
-# This script calls the globally installed hive command
+# This script calls the hive command from vendor/bin
 
-# Check if hive is installed globally
-if ! command -v hive &> /dev/null; then
-    echo "Error: hive command not found"
-    echo "Please install PhpHive CLI globally:"
-    echo "  composer global require phphive/cli"
-    exit 1
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Go up to workspace root and check for vendor/bin/hive
+WORKSPACE_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+VENDOR_HIVE="$WORKSPACE_ROOT/vendor/bin/hive"
+
+# Check if hive is installed in vendor
+if [ -f "$VENDOR_HIVE" ]; then
+    exec "$VENDOR_HIVE" "$@"
 fi
 
-# Execute hive with all arguments
-hive "$@"
+# Fallback: check if hive is installed globally
+if command -v hive &> /dev/null; then
+    exec hive "$@"
+fi
+
+# Not found anywhere
+echo "Error: hive command not found"
+echo ""
+echo "Please install dependencies first:"
+echo "  composer install"
+echo ""
+echo "Or install PhpHive CLI globally:"
+echo "  composer global require phphive/cli"
+exit 1
