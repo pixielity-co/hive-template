@@ -1,6 +1,6 @@
 {
     "$schema": "https://turborepo.dev/schema.json",
-    "ui": "tui",
+    "ui": "stream",
     "daemon": true,
     "envMode": "strict",
     "concurrency": "10",
